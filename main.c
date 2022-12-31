@@ -9,7 +9,7 @@
 
 
 struct node{
-	char *cmd;
+	char cmd[INPUT_MAX];
 	struct node *next;
 };
 typedef struct node node;
@@ -66,7 +66,7 @@ void add_history(char *buffer){
 void print_history(){
 	node *tmp;
 
-	if(is_empty())
+	if(q->count == 0)
 		printf("History is empty!\n");
 	else{
 		tmp = q->head;
@@ -78,10 +78,10 @@ void print_history(){
 }
 
 int read_input(char *input){
-	char *buffer;
-	memcpy(buffer, input, sizeof(&input));
+	char *buffer = (char*) malloc (sizeof(input));
+	memcpy(buffer, input, strlen(input));
 	
-	if (strlen(input) == 0)
+	if (strlen(buffer) == 0)
 		return 0;
 	add_history(buffer);
 	return 1;
