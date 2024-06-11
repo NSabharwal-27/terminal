@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <sys/wait.h>
 
 #define clear() system("clear")
 #define INPUT_MAX 100
@@ -89,8 +90,39 @@ int read_input(char *input) {
     return 1;
 }
 
-void execute(char *input){
-    printf("tehe we working\n");
+void execute(char *input) {
+    char *args[INPUT_MAX];
+    char *token;
+    int i = 0;
+
+    // Remove the trailing newline character
+    input[strcspn(input, "\n")] = '\0';
+
+    // Tokenize the input
+    token = strtok(input, " ");
+    while (token != NULL && i < INPUT_MAX - 1) {
+        args[i++] = token;
+        token = strtok(NULL, " ");
+    }
+    args[i] = NULL; // Null-terminate the args array
+
+    // Fork a child process
+    pid_t pid = fork();
+
+    if (pid < 0) {
+        // Fork failed
+        perror("fork failed");
+        exit(1);
+    } else if (pid == 0) {
+        // In child process
+        execvp(args[0], args);
+        // If execvp returns, it must have failed
+        perror("execvp errored");
+        exit(1);
+    } else {
+        // In parent process
+        wait(NULL);
+    }
 }
 
 int main() {
@@ -101,9 +133,14 @@ int main() {
     username = getlogin();
     do {
         printf("%s:>>", username);
-        fgets(input, INPUT_MAX, stdin);
+        if (fgets(input, INPUT_MAX, stdin) == NULL) {
+            perror("fgets failed");
+            exit(1);
+        }
+
         if (strcmp(input, "exit\n") == 0)
             break;
+
         if (read_input(input)) {
             if (strcmp(input, "history\n") == 0) {
                 print_history();
