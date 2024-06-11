@@ -11,15 +11,15 @@ This project implements a simple shell in C, allowing users to execute commands,
 
 ## Directory Structure
 
-project_root/  
-├── include/  
-│ └── queue.h  
-├── src/  
-│ ├── main.c  
-│ └── queue.c  
-├── bin/ # Object files will be compiled here  
-├── Makefile  
-└── README.md  
+project_root/ 
+├── include/ 
+│ └── queue.h 
+├── src/ 
+│ ├── main.c 
+│ └── queue.c 
+├── bin/ # Object files will be compiled here 
+├── Makefile 
+└── README.md 
 
 ## Usage
 
