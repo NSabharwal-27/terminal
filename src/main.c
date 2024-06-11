@@ -3,78 +3,18 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include "queue.h"
 
 #define clear() system("clear")
 #define INPUT_MAX 100
-#define HIST_MAX 15
 
-struct node {
-    char cmd[INPUT_MAX];
-    struct node *next;
-};
-typedef struct node node;
-
-struct queue {
-    int count;
-    node *head;
-    node *tail;
-};
-typedef struct queue queue;
-
-queue *q;
-
-void q_init() {
-    q = malloc(sizeof(queue));
-    q->count = 0;
-    q->head = NULL;
-    q->tail = NULL;
-}
-
-int is_empty() {
-    return q->tail == NULL;
-}
-
-int get_size() {
-    return q->count;
-}
+queue q;
 
 void call_init() {
     clear();
     printf("Welcome to my shell!\n");
     printf("Use this shell at your own risk!!\n\n");
-    q_init();
-}
-
-void enqueue(char *buffer) {
-    node *tmp = (node*)malloc(sizeof(node));
-    tmp->next = NULL;
-
-    strcpy(tmp->cmd, buffer);
-    if (is_empty()) {
-        q->head = q->tail = tmp;
-    } else {
-        q->tail->next = tmp;
-        q->tail = tmp;
-    }
-    q->count++;
-}
-
-void add_history(char *buffer) {
-    enqueue(buffer);
-}
-
-void print_history() {
-    node *tmp;
-
-    if (q->count == 0)
-        printf("History is empty!\n");
-    else {
-        tmp = q->head;
-        while (tmp != NULL) {
-            printf("%s", tmp->cmd);
-            tmp = tmp->next;
-        }
-    }
+    q_init(&q);
 }
 
 int read_input(char *input) {
@@ -85,7 +25,7 @@ int read_input(char *input) {
         free(buffer);
         return 0;
     }
-    add_history(buffer);
+    enqueue(&q, buffer);
     free(buffer);  // Free the buffer after adding to history
     return 1;
 }
@@ -143,11 +83,11 @@ int main() {
 
         if (read_input(input)) {
             if (strcmp(input, "history\n") == 0) {
-                print_history();
+                print_history(&q);
             } else {
                 execute(input);
             }
         }
-    } while(1);
+    } while (1);
     return 0;
 }
