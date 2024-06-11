@@ -99,7 +99,7 @@ int main() {
     call_init();
 
     username = getlogin();
-    while (1) {
+    do {
         printf("%s:>>", username);
         fgets(input, INPUT_MAX, stdin);
         if (strcmp(input, "exit\n") == 0)
@@ -111,6 +111,6 @@ int main() {
                 execute(input);
             }
         }
-    }
+    } while(1);
     return 0;
 }
