@@ -89,6 +89,10 @@ int read_input(char *input) {
     return 1;
 }
 
+void execute(char *input){
+    printf("tehe we working\n");
+}
+
 int main() {
     char input[INPUT_MAX];
     char *username;
@@ -103,6 +107,8 @@ int main() {
         if (read_input(input)) {
             if (strcmp(input, "history\n") == 0) {
                 print_history();
+            } else {
+                execute(input);
             }
         }
     }
