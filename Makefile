@@ -1,11 +1,18 @@
 CC = gcc
-CFLAGS = -Wall
+CFLAGS = -Wall -Iinclude
 
 SRC_DIRS := ./src
+INC_DIRS := ./include
 
-main: $(SRC_DIRS)/main.c
-	$(CC) $(CFLAGS) $(SRC_DIRS)/main.c -o main
+SRCS := $(SRC_DIRS)/main.c $(SRC_DIRS)/queue.c
+OBJS := $(SRCS:.c=.o)
+
+main: $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o main
+
+$(SRC_DIRS)/%.o: $(SRC_DIRS)/%.c
+	$(CC) $(CFLAGS) -c $< -o $@
 
 .PHONY: clean
 clean:
-	rm -f main
+	rm -f $(SRC_DIRS)/*.o main
