@@ -25,12 +25,11 @@ void enqueue(queue *q, char *buffer) {
         tmp->cmd_number = INIT;
         q->head = q->tail = tmp;
     } else {
-        tmp->cmd_number = (q->count)++;
+        tmp->cmd_number = (q->count) + 1;
         q->tail->next = tmp;
         q->tail = tmp;
     }
     q->count++;
-    free(tmp);
 }
 
 void print_history(queue *q) {
