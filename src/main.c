@@ -17,6 +17,8 @@ void call_init() {
     q_init(&q);
 }
 
+// TODO if strlen buff == 0 ? flag = 0 : flag = 1
+// flag determines return value
 int read_input(char *input) {
     char *buffer = (char*) malloc (strlen(input) + 1);
     strcpy(buffer, input);

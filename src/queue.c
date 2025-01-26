@@ -22,22 +22,25 @@ void enqueue(queue *q, char *buffer) {
     tmp->next = NULL;
     strcpy(tmp->cmd, buffer);
     if (is_empty(q)) {
+        tmp->cmd_number = INIT;
         q->head = q->tail = tmp;
     } else {
+        tmp->cmd_number = (q->count)++;
         q->tail->next = tmp;
         q->tail = tmp;
     }
     q->count++;
+    free(tmp);
 }
 
 void print_history(queue *q) {
     node *tmp;
-    if (q->count == 0)
+    if (is_empty(q))
         printf("History is empty!\n");
     else {
         tmp = q->head;
         while (tmp != NULL) {
-            printf("%s", tmp->cmd);
+            printf("%d\t%s",tmp->cmd_number, tmp->cmd);
             tmp = tmp->next;
         }
     }

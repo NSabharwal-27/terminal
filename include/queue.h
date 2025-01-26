@@ -1,10 +1,12 @@
 #ifndef QUEUE_H
 #define QUEUE_H
 
-#define INPUT_MAX 100
+#define INPUT_MAX   100
+#define INIT        1
 
 struct node {
     char cmd[INPUT_MAX];
+    int cmd_number;
     struct node *next;
 };
 typedef struct node node;
